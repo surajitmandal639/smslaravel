@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 // Add this route to handle CSRF cookie setting
@@ -21,8 +20,8 @@ Route::prefix('auth')->group(function () {
     // ✅ Login (Signin)
     Route::post('/login', [AuthController::class, 'login']);
 
-    // ✅ Logout    
-    
+    // ✅ Logout
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
     // ✅ Get Authenticated User (Profile)
@@ -40,7 +39,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    
+
     Route::prefix('admin')->middleware(['role:admin'])->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
         // 🔹 Users Management
