@@ -26,7 +26,7 @@ Route::prefix('auth')->group(function () {
 
     // ✅ Get Authenticated User (Profile)
     Route::get('/user', function (Request $request) {
-        return response()->json($request->user());
+        return response()->json($request->user()->load('roles'));
     })->middleware('auth:sanctum');
 
     // ✅ Password Reset Routes

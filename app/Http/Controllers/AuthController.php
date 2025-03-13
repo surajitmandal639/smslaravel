@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     // Login Method
-   
-    
+
+
     public function login(Request $request)
     {
         try {
@@ -21,22 +21,22 @@ class AuthController extends Controller
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
-    
+
             $credentials = $request->only('email', 'password');
-    
+
             // Attempt to authenticate
             if (Auth::attempt($credentials, $request->remember_me)) {
                 $user = Auth::user();
                 $token = $user->createToken('authToken')->plainTextToken;
-    
+
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Login successful.',
-                    'user' => $user,
+                    'user' => $user->load('roles'),
                     'token' => $token,
                 ]);
             }
-    
+
             // Authentication failed
             return response()->json([
                 'status' => 'error',
@@ -51,7 +51,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
+
 
 
     // Register Method
@@ -81,7 +81,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'User registered successfully',
-                'user' => $user,
+                'user' => $user->load('roles'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
